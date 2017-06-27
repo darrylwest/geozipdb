@@ -1,7 +1,6 @@
 package unit
 
 import (
-	"os"
 	"geozipdb"
 	"testing"
 
@@ -13,16 +12,14 @@ func TestConfig(t *testing.T) {
 
 	g.Describe("Config", func() {
 		g.It("should create a config struct", func() {
-			cfg := new(spotcache.Config)
-			g.Assert(cfg.Baseport).Equal(0)
-			g.Assert(cfg.Home).Equal("")
+			cfg := new(geozipdb.Config)
+			g.Assert(cfg.Port).Equal(0)
 		})
 
 		g.It("should create a context struct with defaults set", func() {
-			cfg := spotcache.NewDefaultConfig()
+			cfg := geozipdb.NewDefaultConfig()
 
-			g.Assert(cfg.Home).Equal(home)
-			g.Assert(cfg.Port).Equal(19501)
+			g.Assert(cfg.Port).Equal(29444)
 		})
 	})
 }

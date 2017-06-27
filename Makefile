@@ -16,7 +16,7 @@ format:
 	( gofmt -s -w src/*.go src/geozipdb/*.go test/*/*.go )
 
 lint:
-	@( golint src/... && golint test/... && golint tools/... && golint examples )
+	@( golint src/... && golint test/... )
 
 qtest:
 	@( cd test/unit && go test -cover )
