@@ -15,7 +15,7 @@ import (
 
 // Config the config structure
 type Config struct {
-	Port  int
+	Port int
 }
 
 // NewDefaultConfig default settings
@@ -54,4 +54,3 @@ func ParseArgs() *Config {
 func IsProduction(env string) bool {
 	return true
 }
-
