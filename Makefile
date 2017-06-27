@@ -3,10 +3,10 @@ export GOPATH:=$(HOME)/.gopath:$(PWD)
 
 build: 
 	@[ -d bin ] || mkdir bin
-	( go build -o bin/geo-zipdb src/geo-zipdb.go )
+	( go build -o bin/geozipdb src/main.go )
 
 build-linux:
-	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o docker/geozipdb src/geozipdb.go
+	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o docker/geozipdb src/main.go
 
 install-deps:
 	go get -u github.com/golang/lint/golint
@@ -29,7 +29,7 @@ watch:
 	./watcher.js
 
 run:
-	( go run src/geozipdb.go )
+	( go run src/main.go )
 
 start:
 	( make build )
@@ -38,10 +38,7 @@ start:
 status:
 	@( echo "implement a socket client that will request status..." )
 
-ping:
-	@( echo "implement a socket client that will request a ping..." )
-
 edit:
-	vi -O3 src/*/*.go test/unit/*.go src/*.go
+	vi -O2 src/*/*.go test/unit/*.go src/*.go
 
 .PHONY: format test qtest watch run
