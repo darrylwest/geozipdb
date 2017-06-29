@@ -1,10 +1,10 @@
 package main
 
 import (
-    "fmt"
-    "geozipdb"
+	"fmt"
+	"geozipdb"
 )
 
 func main() {
-    fmt.Println(geozipdb.Version())
+	fmt.Println(geozipdb.Version())
 }
