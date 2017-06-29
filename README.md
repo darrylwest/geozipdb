@@ -20,5 +20,5 @@ A simple application that returns a list of US zip codes for a given latitude/lo
 
 Apache 2.0
 
-###### Copyright © 2014-2017, Rain City Software | darryl.west | Version 1.0.0
+###### Copyright © 2017, Rain City Software | darryl.west | Version 1.0.0
 
