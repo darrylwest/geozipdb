@@ -1,10 +1,10 @@
-package geozipdb
-
 //
 // config  - application specification and CLI parsing
 //
 // @author darryl.west <darryl.west@raincitysoftware.com>
 // @created 2017-06-26 17:56:46
+
+package geozipdb
 
 import (
 	"flag"
