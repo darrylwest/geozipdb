@@ -13,25 +13,33 @@ import (
 	"strings"
 )
 
+// Keytype - keys are strings
 type Keytype string
+
+// Ziptype - zipcodes are strings
 type Ziptype string
 
+// Coord - lat/lng
 type Coord struct {
 	Lat float64
 	Lng float64
 }
 
+// ZipcodeCoord - zipcode and coord lat/lng
 type ZipcodeCoord struct {
 	Zipcode Ziptype
 	Coord
 }
 
+// Service - the primary service struct
 type Service struct {
 }
 
 var keyMap = make(map[Keytype][]*ZipcodeCoord)
 var zipMap = make(map[Ziptype]*Coord)
+var initialized = false
 
+// CreateKey - create a key from lat/lng
 func (svc Service) CreateKey(lat, lng float64) Keytype {
 	llat := int(lat * 10)
 	llng := int(lng * 10)
@@ -39,7 +47,8 @@ func (svc Service) CreateKey(lat, lng float64) Keytype {
 	return Keytype(fmt.Sprintf("%d:%d", llat, llng))
 }
 
-func (svc Service) initialize() {
+// Initialize - initialize the data
+func (svc Service) Initialize() {
 	fmt.Println("initialize the database...")
 	lines := strings.Split(geodata, "\n")
 
@@ -63,11 +72,13 @@ func (svc Service) initialize() {
 	fmt.Printf("processed %d rows...\n", len(lines))
 }
 
+// CoordFromZip - return the coordinate of this zipcode
 func (svc Service) CoordFromZip(code Ziptype) (*Coord, bool) {
 	v, ok := zipMap[code]
 	return v, ok
 }
 
+// ZipListFromCoord - return a list of zip codes that are near the coordinates
 func (svc Service) ZipListFromCoord(coord *Coord) ([]*ZipcodeCoord, bool) {
 	key := svc.CreateKey(coord.Lat, coord.Lng)
 	v, ok := keyMap[key]
@@ -75,10 +86,14 @@ func (svc Service) ZipListFromCoord(coord *Coord) ([]*ZipcodeCoord, bool) {
 	return v, ok
 }
 
+// Start - initialize the data and start the listener service
 func (svc Service) Start() {
-	svc.initialize()
+    if initialized == false {
+        svc.Initialize()
+    }
 }
 
+// NewService - create the service based on config
 func NewService(config *Config) *Service {
 	svc := new(Service)
 
