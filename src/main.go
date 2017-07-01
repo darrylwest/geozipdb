@@ -6,10 +6,10 @@ import (
 )
 
 func main() {
-    config := geozipdb.ParseArgs()
+	config := geozipdb.ParseArgs()
 
-    service := geozipdb.NewService(config)
+	service := geozipdb.NewService(config)
 
-    fmt.Printf("version %s\n", geozipdb.Version())
-    service.Start()
+	fmt.Printf("version %s\n", geozipdb.Version())
+	service.Start()
 }
