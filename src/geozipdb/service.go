@@ -132,15 +132,15 @@ func (svc Service) ziplistHandler(w http.ResponseWriter, r *http.Request, ps htt
 	coord := Coord{lat, lng}
 
 	if list, ok := svc.ZipListFromCoord(&coord); ok == true && len(list) > 0 {
-        zips := make([]string, len(list))
-        for i := 0; i < len(list); i++ {
-            zips[i] = string(list[i].Zipcode)
-        }
+		zips := make([]string, len(list))
+		for i := 0; i < len(list); i++ {
+			zips[i] = string(list[i].Zipcode)
+		}
 
-        str := strings.Join(zips, ",")
-        log.Info("zip list for coords %s is %s", p, str)
+		str := strings.Join(zips, ",")
+		log.Info("zip list for coords %s is %s", p, str)
 
-		fmt.Fprintf(w, "%s\n\r", str);
+		fmt.Fprintf(w, "%s\n\r", str)
 	} else {
 		svc.errorHandler(w, r, fmt.Sprintf("could not find zipcodes for %s", p))
 		return
