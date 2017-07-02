@@ -24,10 +24,17 @@ Here are the options:
 
 ### As a Service
 
-Assuming the service is running on the default port 5000 with the default route of /v1/zipdb...
+Assuming the service is running on the default port 5000 with the default route of /v1/zipdb to get the lat/lng coordinates of zipcode 94705:
 
-curl http://localhost:5000/v1/zipdb/coord/94705 -> 37.865183,-122.238209
-curl http://localhost:5000/v1/zipdb/ziplist/37.865183,-122.238209 -> [ list ]
+`curl http://localhost:5000/v1/zipdb/coord/94705 -> 37.865183,-122.238209`
+
+A single response with the lat,lng is returned.  A 404 is returned if the zipcode is not in out database.
+
+To get a list of zip codes from coordinates do this:
+
+`curl http://localhost:5000/v1/zipdb/ziplist/37.865183,-122.238209 -> 94704,94705,94706...`
+
+A comma delimied list is return or a 404 if the lat/lng does not map to a zip.
 
 _Note: be careful not to have spaces in your url_
 
