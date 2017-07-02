@@ -14,8 +14,8 @@ import (
 
 // Config the config structure
 type Config struct {
-	Port int
-    PrimaryRoute string
+	Port         int
+	PrimaryRoute string
 }
 
 // NewDefaultConfig default settings
@@ -23,7 +23,7 @@ func NewDefaultConfig() *Config {
 	cfg := new(Config)
 
 	cfg.Port = 5000
-    cfg.PrimaryRoute = "/v1/zipdb"
+	cfg.PrimaryRoute = "/v1/zipdb"
 
 	return cfg
 }
@@ -48,7 +48,7 @@ func ParseArgs() *Config {
 	cfg := new(Config)
 
 	cfg.Port = *port
-    cfg.PrimaryRoute = *route
+	cfg.PrimaryRoute = *route
 
 	return cfg
 }

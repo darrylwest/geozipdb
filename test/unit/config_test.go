@@ -10,7 +10,7 @@ import (
 func TestConfig(t *testing.T) {
 	g := Goblin(t)
 
-    geozipdb.CreateLogger()
+	geozipdb.CreateLogger()
 
 	g.Describe("Config", func() {
 		g.It("should create a config struct", func() {
@@ -22,13 +22,13 @@ func TestConfig(t *testing.T) {
 			cfg := geozipdb.NewDefaultConfig()
 
 			g.Assert(cfg.Port).Equal(5000)
-            g.Assert(cfg.PrimaryRoute).Equal("/v1/zipdb")
+			g.Assert(cfg.PrimaryRoute).Equal("/v1/zipdb")
 		})
 
-        g.It("should parse an empty command line and return default config", func() {
+		g.It("should parse an empty command line and return default config", func() {
 			cfg := geozipdb.ParseArgs()
 			g.Assert(cfg.Port).Equal(5000)
-            g.Assert(cfg.PrimaryRoute).Equal("/v1/zipdb")
-        })
+			g.Assert(cfg.PrimaryRoute).Equal("/v1/zipdb")
+		})
 	})
 }

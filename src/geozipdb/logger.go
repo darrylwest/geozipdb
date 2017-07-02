@@ -25,9 +25,8 @@ func CreateLogger() *logger.Logger {
 		}
 
 		log = logger.NewLogger(handler)
-        log.Info("logger started...")
+		log.Info("logger started...")
 	}
 
 	return log
 }
-

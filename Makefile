@@ -11,6 +11,7 @@ build-linux:
 install-deps:
 	go get -u github.com/golang/lint/golint
 	go get github.com/franela/goblin
+	go get github.com/darrylwest/cassava-logger/logger
 	go get github.com/julienschmidt/httprouter
 
 format:
