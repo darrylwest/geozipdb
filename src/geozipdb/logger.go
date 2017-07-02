@@ -29,4 +29,3 @@ func CreateLogger() *logger.Logger {
 
 	return log
 }
-

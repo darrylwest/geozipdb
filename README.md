@@ -34,7 +34,7 @@ A single response with the lat,lng is returned.  A 404 is returned if the zipcod
 
 To get a list of zip codes from coordinates do this:
 
-`curl http://localhost:5000/v1/zipdb/ziplist/37.865183,-122.238209 -> 94704,94705,94706...`
+`curl http://localhost:5000/v1/zipdb/ziplist/37.865183,-122.238209 -> 94602,94608,94609,94610,94611...`
 
 A comma delimited list is return or a 404 if the lat/lng does not map to a zip.
 
@@ -57,5 +57,5 @@ You may change the logging level either through the command line, or in the API 
 
 Apache 2.0
 
-###### Copyright © 2017, Rain City Software | darryl.west | Version 1.0.7
+###### Copyright © 2017, Rain City Software | darryl.west | Version 1.0.8
 

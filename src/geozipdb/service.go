@@ -99,9 +99,9 @@ func NewService(config *Config) *Service {
 }
 
 func (svc Service) errorHandler(w http.ResponseWriter, r *http.Request, msg string) {
-    log.Warn("%s", msg)
-    w.WriteHeader(http.StatusNotFound)
-    fmt.Fprintf(w, "%s\n\r", msg)
+	log.Warn("%s", msg)
+	w.WriteHeader(http.StatusNotFound)
+	fmt.Fprintf(w, "%s\n\r", msg)
 }
 
 // return the zip list for a given coordinate lat/lng
@@ -109,34 +109,42 @@ func (svc Service) ziplistHandler(w http.ResponseWriter, r *http.Request, ps htt
 	p := ps.ByName("coord")
 	log.Info("find zip list for coord %s\n", p)
 
-    fields := strings.Split(p, ",")
-    if len(fields) != 2 {
-        svc.errorHandler(w, r, fmt.Sprintf("coordinates lat/lng not formatted correctly from %s", p))
-        return
-    }
+	fields := strings.Split(p, ",")
+	if len(fields) != 2 {
+		svc.errorHandler(w, r, fmt.Sprintf("coordinates lat/lng not formatted correctly from %s", p))
+		return
+	}
 
-    lat, err := strconv.ParseFloat(fields[0], 64)
-    if err != nil {
-        svc.errorHandler(w, r, fmt.Sprintf("could not parse lat from %s", p))
-        return
-    }
+	lat, err := strconv.ParseFloat(fields[0], 64)
+	if err != nil {
+		svc.errorHandler(w, r, fmt.Sprintf("could not parse lat from %s", p))
+		return
+	}
 
-    lng, err := strconv.ParseFloat(fields[1], 64)
-    if err != nil {
-        svc.errorHandler(w, r, fmt.Sprintf("could not parse lng from %s", p))
-        return
-    }
+	lng, err := strconv.ParseFloat(fields[1], 64)
+	if err != nil {
+		svc.errorHandler(w, r, fmt.Sprintf("could not parse lng from %s", p))
+		return
+	}
 
-    log.Info("find list from coords %f,%f", lat, lng)
+	log.Info("find list from coords %f,%f", lat, lng)
 
-    coord := Coord{lat, lng}
+	coord := Coord{lat, lng}
 
-    if list, ok := svc.ZipListFromCoord(&coord); ok == true {
-        fmt.Fprintf(w, "%v\n\r", list)
-    } else {
-        svc.errorHandler(w, r, fmt.Sprintf("could not find zipcodes for %s", p))
-        return
-    }
+	if list, ok := svc.ZipListFromCoord(&coord); ok == true && len(list) > 0 {
+        zips := make([]string, len(list))
+        for i := 0; i < len(list); i++ {
+            zips[i] = string(list[i].Zipcode)
+        }
+
+        str := strings.Join(zips, ",")
+        log.Info("zip list for coords %s is %s", p, str)
+
+		fmt.Fprintf(w, "%s\n\r", str);
+	} else {
+		svc.errorHandler(w, r, fmt.Sprintf("could not find zipcodes for %s", p))
+		return
+	}
 
 }
 
@@ -150,8 +158,8 @@ func (svc Service) coordHandler(w http.ResponseWriter, r *http.Request, ps httpr
 		log.Info("found %s for zip %s", str, zipcode)
 		fmt.Fprintf(w, "%s\n\r", str)
 	} else {
-        svc.errorHandler(w, r, fmt.Sprintf("could not find coordinates for zip %s", zipcode))
-        return
+		svc.errorHandler(w, r, fmt.Sprintf("could not find coordinates for zip %s", zipcode))
+		return
 	}
 }
 
