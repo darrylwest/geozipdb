@@ -45,9 +45,9 @@ _Note: be careful not to have spaces in your url._
 config := geozipdb.NewDefaultConfig()
 service := geozipdb.NewService(config)
 
-coords := geozipdb.CoordFromZip("94705")
+coord := geozipdb.CoordFromZip("94705")
 
-fmt.Println(coords.Lat, coords.Lng)
+fmt.Println(coord.Lat, coord.Lng)
 
 ### Logging
 
@@ -57,5 +57,5 @@ You may change the logging level either through the command line, or in the API 
 
 Apache 2.0
 
-###### Copyright © 2017, Rain City Software | darryl.west | Version 1.0.5
+###### Copyright © 2017, Rain City Software | darryl.west | Version 1.0.7
 

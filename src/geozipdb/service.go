@@ -100,16 +100,18 @@ func NewService(config *Config) *Service {
 
 // return the zip list for a given coordinate lat/lng
 func (svc Service) ziplistHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	p := ps.ByName("coords")
-	log.Info("find zip list for coords %s\n", p)
+	p := ps.ByName("coord")
+	log.Info("find zip list for coord %s\n", p)
 
-	fmt.Fprintf(w, "p %s\n\r", ps.ByName("coord"))
+    coord := strings.Split(p, ",")
+    log.Info("find list from coords %v", coord)
+	fmt.Fprintf(w, "%s\n\r", "94704,94705")
 }
 
 // return the coordinates for a given zip
 func (svc Service) coordHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	zipcode := ps.ByName("zip")
-	log.Debug("find coords for zip %s\n", zipcode)
+	log.Debug("find coord for zip %s\n", zipcode)
 
 	if coord, ok := svc.CoordFromZip(Ziptype(zipcode)); ok {
 		str := fmt.Sprintf("%f,%f", coord.Lat, coord.Lng)
@@ -117,7 +119,8 @@ func (svc Service) coordHandler(w http.ResponseWriter, r *http.Request, ps httpr
 		fmt.Fprintf(w, "%s\n\r", str)
 	} else {
 		// todo set status to 404
-		log.Warn("no coords located for zip %s", zipcode)
+		log.Warn("no coord located for zip %s", zipcode)
+        w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(w, "not found for zip %s\n\r", zipcode)
 	}
 }
@@ -134,7 +137,7 @@ func (svc Service) Start() {
 
 	rname := fmt.Sprintf("%s/coord/:zip", cfg.PrimaryRoute)
 	router.GET(rname, svc.coordHandler)
-	fmt.Printf("added route %s\n", rname)
+	log.Info("added route %s\n", rname)
 
 	rname = fmt.Sprintf("%s/ziplist/:coord", cfg.PrimaryRoute)
 	router.GET(rname, svc.ziplistHandler)

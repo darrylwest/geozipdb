@@ -36,6 +36,7 @@ func ParseArgs() *Config {
 
 	port := flag.Int("port", dflt.Port, "set the server's port number (e.g., 29444)...")
 	route := flag.String("route", dflt.PrimaryRoute, "set the server's primary route (e.g., /v1/zipdb)...")
+    level := flag.Int("loglevel", 2, "set the server's log level 0..5 for trace..error, default info=2")
 
 	flag.Parse()
 
@@ -49,6 +50,8 @@ func ParseArgs() *Config {
 
 	cfg.Port = *port
 	cfg.PrimaryRoute = *route
+
+    log.SetLevel(*level)
 
 	return cfg
 }
