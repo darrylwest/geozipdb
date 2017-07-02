@@ -98,14 +98,46 @@ func NewService(config *Config) *Service {
 	return svc
 }
 
+func (svc Service) errorHandler(w http.ResponseWriter, r *http.Request, msg string) {
+    log.Warn("%s", msg)
+    w.WriteHeader(http.StatusNotFound)
+    fmt.Fprintf(w, "%s\n\r", msg)
+}
+
 // return the zip list for a given coordinate lat/lng
 func (svc Service) ziplistHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	p := ps.ByName("coord")
 	log.Info("find zip list for coord %s\n", p)
 
-    coord := strings.Split(p, ",")
-    log.Info("find list from coords %v", coord)
-	fmt.Fprintf(w, "%s\n\r", "94704,94705")
+    fields := strings.Split(p, ",")
+    if len(fields) != 2 {
+        svc.errorHandler(w, r, fmt.Sprintf("coordinates lat/lng not formatted correctly from %s", p))
+        return
+    }
+
+    lat, err := strconv.ParseFloat(fields[0], 64)
+    if err != nil {
+        svc.errorHandler(w, r, fmt.Sprintf("could not parse lat from %s", p))
+        return
+    }
+
+    lng, err := strconv.ParseFloat(fields[1], 64)
+    if err != nil {
+        svc.errorHandler(w, r, fmt.Sprintf("could not parse lng from %s", p))
+        return
+    }
+
+    log.Info("find list from coords %f,%f", lat, lng)
+
+    coord := Coord{lat, lng}
+
+    if list, ok := svc.ZipListFromCoord(&coord); ok == true {
+        fmt.Fprintf(w, "%v\n\r", list)
+    } else {
+        svc.errorHandler(w, r, fmt.Sprintf("could not find zipcodes for %s", p))
+        return
+    }
+
 }
 
 // return the coordinates for a given zip
@@ -118,10 +150,8 @@ func (svc Service) coordHandler(w http.ResponseWriter, r *http.Request, ps httpr
 		log.Info("found %s for zip %s", str, zipcode)
 		fmt.Fprintf(w, "%s\n\r", str)
 	} else {
-		// todo set status to 404
-		log.Warn("no coord located for zip %s", zipcode)
-        w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "not found for zip %s\n\r", zipcode)
+        svc.errorHandler(w, r, fmt.Sprintf("could not find coordinates for zip %s", zipcode))
+        return
 	}
 }
 
