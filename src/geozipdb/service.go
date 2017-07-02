@@ -9,10 +9,10 @@ package geozipdb
 
 import (
 	"fmt"
+	"github.com/julienschmidt/httprouter"
+	"net/http"
 	"strconv"
 	"strings"
-    "github.com/julienschmidt/httprouter"
-    "net/http"
 )
 
 // Keytype - keys are strings
@@ -35,7 +35,7 @@ type ZipcodeCoord struct {
 
 // Service - the primary service struct
 type Service struct {
-    config *Config
+	config *Config
 }
 
 var keyMap = make(map[Keytype][]*ZipcodeCoord)
@@ -93,19 +93,29 @@ func (svc Service) ZipListFromCoord(coord *Coord) ([]*ZipcodeCoord, bool) {
 func NewService(config *Config) *Service {
 	svc := new(Service)
 
-    svc.config = config
+	svc.config = config
 
 	return svc
 }
 
 // return the zip list for a given coordinate lat/lng
 func (svc Service) ziplistHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-    fmt.Fprintf(w, "p %s", ps.ByName("coord"))
+	p := ps.ByName("coords")
+	fmt.Printf("find zip list for coords %s\n", p)
+
+	fmt.Fprintf(w, "p %s\n\r", ps.ByName("coord"))
 }
 
 // return the coordinates for a given zip
 func (svc Service) coordHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-    fmt.Fprintf(w, "p %s", ps.ByName("zip"))
+	zipcode := ps.ByName("zip")
+	fmt.Printf("find coords for zip %s\n", zipcode)
+
+	if coord, ok := svc.CoordFromZip(Ziptype(zipcode)); ok {
+		fmt.Fprintf(w, "coord:%f/%f\n\r", coord.Lat, coord.Lng)
+	} else {
+		fmt.Fprintf(w, "not found for zip %s\n\r", zipcode)
+	}
 }
 
 // Start - initialize the data and start the listener service
@@ -114,18 +124,17 @@ func (svc Service) Start() {
 		svc.Initialize()
 	}
 
-    router := httprouter.New()
+	router := httprouter.New()
 
-    router.GET("/v1/zipdb/coord/:zip", svc.coordHandler)
-    router.GET("/v1/zipdb/ziplist/:coord", svc.ziplistHandler)
+	router.GET("/v1/zipdb/coord/:zip", svc.coordHandler)
+	router.GET("/v1/zipdb/ziplist/:coord", svc.ziplistHandler)
 
-    port := svc.config.Port
-    host := fmt.Sprintf(":%d", port)
-    fmt.Printf("listening on port %d", port)
+	port := svc.config.Port
+	host := fmt.Sprintf(":%d", port)
+	fmt.Printf("listening on port %d\n", port)
 
-    err := http.ListenAndServe(host, router)
-    if err != nil {
-        panic(err)
-    }
+	err := http.ListenAndServe(host, router)
+	if err != nil {
+		panic(err)
+	}
 }
-
