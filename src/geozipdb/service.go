@@ -11,6 +11,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+    "github.com/julienschmidt/httprouter"
+    "net/http"
 )
 
 // Keytype - keys are strings
@@ -33,6 +35,7 @@ type ZipcodeCoord struct {
 
 // Service - the primary service struct
 type Service struct {
+    config *Config
 }
 
 var keyMap = make(map[Keytype][]*ZipcodeCoord)
@@ -86,16 +89,43 @@ func (svc Service) ZipListFromCoord(coord *Coord) ([]*ZipcodeCoord, bool) {
 	return v, ok
 }
 
-// Start - initialize the data and start the listener service
-func (svc Service) Start() {
-    if initialized == false {
-        svc.Initialize()
-    }
-}
-
 // NewService - create the service based on config
 func NewService(config *Config) *Service {
 	svc := new(Service)
 
+    svc.config = config
+
 	return svc
 }
+
+// return the zip list for a given coordinate lat/lng
+func (svc Service) ziplistHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+    fmt.Fprintf(w, "p %s", ps.ByName("coord"))
+}
+
+// return the coordinates for a given zip
+func (svc Service) coordHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+    fmt.Fprintf(w, "p %s", ps.ByName("zip"))
+}
+
+// Start - initialize the data and start the listener service
+func (svc Service) Start() {
+	if initialized == false {
+		svc.Initialize()
+	}
+
+    router := httprouter.New()
+
+    router.GET("/v1/zipdb/coord/:zip", svc.coordHandler)
+    router.GET("/v1/zipdb/ziplist/:coord", svc.ziplistHandler)
+
+    port := svc.config.Port
+    host := fmt.Sprintf(":%d", port)
+    fmt.Printf("listening on port %d", port)
+
+    err := http.ListenAndServe(host, router)
+    if err != nil {
+        panic(err)
+    }
+}
+

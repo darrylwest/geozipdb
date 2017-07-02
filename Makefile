@@ -11,6 +11,7 @@ build-linux:
 install-deps:
 	go get -u github.com/golang/lint/golint
 	go get github.com/franela/goblin
+	go get github.com/julienschmidt/httprouter
 
 format:
 	( gofmt -s -w src/*.go src/geozipdb/*.go test/*/*.go )

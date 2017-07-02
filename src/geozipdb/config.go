@@ -22,7 +22,7 @@ type Config struct {
 func NewDefaultConfig() *Config {
 	cfg := new(Config)
 
-	cfg.Port = 29444
+	cfg.Port = 5000
 
 	return cfg
 }

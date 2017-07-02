@@ -19,7 +19,7 @@ func TestConfig(t *testing.T) {
 		g.It("should create a context struct with defaults set", func() {
 			cfg := geozipdb.NewDefaultConfig()
 
-			g.Assert(cfg.Port).Equal(29444)
+			g.Assert(cfg.Port).Equal(5000)
 		})
 	})
 }
