@@ -16,6 +16,7 @@ import (
 // Config the config structure
 type Config struct {
 	Port int
+    PrimaryRoute string
 }
 
 // NewDefaultConfig default settings
@@ -23,6 +24,7 @@ func NewDefaultConfig() *Config {
 	cfg := new(Config)
 
 	cfg.Port = 5000
+    cfg.PrimaryRoute = "/v1/zipdb"
 
 	return cfg
 }
@@ -34,6 +36,7 @@ func ParseArgs() *Config {
 	vers := flag.Bool("version", false, "show the version and exit")
 
 	port := flag.Int("port", dflt.Port, "set the server's port number (e.g., 29444)...")
+	route := flag.String("route", dflt.PrimaryRoute, "set the server's primary route (e.g., /v1/zipdb)...")
 
 	flag.Parse()
 
@@ -46,6 +49,7 @@ func ParseArgs() *Config {
 	cfg := new(Config)
 
 	cfg.Port = *port
+    cfg.PrimaryRoute = *route
 
 	return cfg
 }

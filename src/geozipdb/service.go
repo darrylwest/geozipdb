@@ -112,7 +112,7 @@ func (svc Service) coordHandler(w http.ResponseWriter, r *http.Request, ps httpr
 	fmt.Printf("find coords for zip %s\n", zipcode)
 
 	if coord, ok := svc.CoordFromZip(Ziptype(zipcode)); ok {
-		fmt.Fprintf(w, "coord:%f/%f\n\r", coord.Lat, coord.Lng)
+		fmt.Fprintf(w, "%f,%f\n\r", coord.Lat, coord.Lng)
 	} else {
 		fmt.Fprintf(w, "not found for zip %s\n\r", zipcode)
 	}
@@ -124,10 +124,17 @@ func (svc Service) Start() {
 		svc.Initialize()
 	}
 
+    cfg := svc.config
+
 	router := httprouter.New()
 
-	router.GET("/v1/zipdb/coord/:zip", svc.coordHandler)
-	router.GET("/v1/zipdb/ziplist/:coord", svc.ziplistHandler)
+    rname := fmt.Sprintf("%s/coord/:zip", cfg.PrimaryRoute)
+	router.GET(rname, svc.coordHandler)
+    fmt.Printf("added route %s\n", rname)
+
+    rname = fmt.Sprintf("%s/ziplist/:coord", cfg.PrimaryRoute)
+	router.GET(rname, svc.ziplistHandler)
+    fmt.Printf("added route %s\n", rname)
 
 	port := svc.config.Port
 	host := fmt.Sprintf(":%d", port)

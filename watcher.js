@@ -55,25 +55,8 @@ const changeHandler = function(event, filename) {
     }
 };
 
-const clientHandler = function(event, filename) {
-    if (filename.endsWith('.go') > 0) {
-        console.log( 'file change: ', filename);
-
-        files.push( filename );
-
-        if (!tid) {
-            tid = setTimeout(function() {
-                run('test-client');
-            }, 500);
-        }
-    }
-};
-
-fs.watch( './src/spotcache', { recursive:false }, changeHandler );
-fs.watch( './test/unit', { recursive:false}, changeHandler );
-
-fs.watch( './src/spotclient', { recursive:false}, clientHandler );
-fs.watch( './test/client', { recursive:false}, clientHandler );
+fs.watch( './src', { recursive:true }, changeHandler );
+fs.watch( './test', { recursive:true}, changeHandler );
 
 process.stdout.write( clearScreen ); 
 console.log('watching go files...');
