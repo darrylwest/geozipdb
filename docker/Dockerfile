@@ -2,7 +2,9 @@ FROM scratch
 
 MAINTAINER darryl.west@raincitysoftware.com
 
-ADD bin/geozipdb
+COPY ./geozipdb /geozipdb
 
-# uses the default port 29444
+EXPOSE 5000
+
+# uses the default port 5000 and route /v1/zipdb
 CMD ["/geozipdb"]

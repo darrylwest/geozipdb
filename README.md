@@ -16,7 +16,7 @@ A simple application that returns a list of US zip codes for a given latitude/lo
 
 Here are the options:
 
-* Clone from [github](https://github.com/darrylwest/geozipdb).  Type make build and look in the bin folder
+* Clone from [github](https://github.com/darrylwest/geozipdb).  Type `make install-deps build` and look in the bin folder
 * go get github.com/darrywest/geozipdb 
 * download from docker repo (coming soon...)
 
@@ -46,6 +46,10 @@ service := geozipdb.NewService(config)
 coords := geozipdb.CoordFromZip("94705")
 
 fmt.Println(coords.Lat, coords.Lng)
+
+### Logging
+
+You may change the logging level either through the command line, or in the API or with a service call.
 
 ## License
 

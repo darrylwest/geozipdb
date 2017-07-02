@@ -1,5 +1,6 @@
 SHELL := /bin/bash
 export GOPATH:=$(HOME)/.gopath:$(PWD)
+IMAGE=darrylwest/geozipdb:latest
 
 build: 
 	@[ -d bin ] || mkdir bin
@@ -7,6 +8,9 @@ build:
 
 build-linux:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o docker/geozipdb src/main.go
+
+container:
+	( make build-linux && cd docker && docker build -t $(IMAGE) . )
 
 install-deps:
 	go get -u github.com/golang/lint/golint

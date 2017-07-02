@@ -1,5 +1,6 @@
 .DS_*
 bin/*
+docker/geozipdb
 *db/*
 *.out
 *.swp
