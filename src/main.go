@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+	geozipdb.CreateLogger()
 	config := geozipdb.ParseArgs()
 
 	service := geozipdb.NewService(config)

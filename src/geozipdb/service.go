@@ -52,10 +52,10 @@ func (svc Service) CreateKey(lat, lng float64) Keytype {
 
 // Initialize - initialize the data
 func (svc Service) Initialize() {
-	fmt.Println("initialize the database...")
+	log.Info("initialize the database...")
 	lines := strings.Split(geodata, "\n")
 
-	fmt.Printf("processing %d data rows...\n", len(lines))
+	log.Info("processing %d data rows...\n", len(lines))
 	for i := 0; i < len(lines); i++ {
 		fields := strings.Split(lines[i], ",")
 		zipcode := Ziptype(fields[0])
@@ -72,7 +72,7 @@ func (svc Service) Initialize() {
 		keyMap[key] = append(keyMap[key], &zcoord)
 	}
 
-	fmt.Printf("processed %d rows...\n", len(lines))
+	log.Info("processed %d rows...\n", len(lines))
 }
 
 // CoordFromZip - return the coordinate of this zipcode
@@ -101,7 +101,7 @@ func NewService(config *Config) *Service {
 // return the zip list for a given coordinate lat/lng
 func (svc Service) ziplistHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	p := ps.ByName("coords")
-	fmt.Printf("find zip list for coords %s\n", p)
+	log.Info("find zip list for coords %s\n", p)
 
 	fmt.Fprintf(w, "p %s\n\r", ps.ByName("coord"))
 }
@@ -109,11 +109,15 @@ func (svc Service) ziplistHandler(w http.ResponseWriter, r *http.Request, ps htt
 // return the coordinates for a given zip
 func (svc Service) coordHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	zipcode := ps.ByName("zip")
-	fmt.Printf("find coords for zip %s\n", zipcode)
+	log.Debug("find coords for zip %s\n", zipcode)
 
 	if coord, ok := svc.CoordFromZip(Ziptype(zipcode)); ok {
-		fmt.Fprintf(w, "%f,%f\n\r", coord.Lat, coord.Lng)
+        str := fmt.Sprintf("%f,%f", coord.Lat, coord.Lng)
+        log.Info("found %s for zip %s", str, zipcode)
+		fmt.Fprintf(w, "%s\n\r", str)
 	} else {
+        // todo set status to 404
+        log.Warn("no coords located for zip %s", zipcode)
 		fmt.Fprintf(w, "not found for zip %s\n\r", zipcode)
 	}
 }
@@ -134,11 +138,11 @@ func (svc Service) Start() {
 
     rname = fmt.Sprintf("%s/ziplist/:coord", cfg.PrimaryRoute)
 	router.GET(rname, svc.ziplistHandler)
-    fmt.Printf("added route %s\n", rname)
+    log.Info("added route %s\n", rname)
 
 	port := svc.config.Port
 	host := fmt.Sprintf(":%d", port)
-	fmt.Printf("listening on port %d\n", port)
+	log.Info("listening on port %d\n", port)
 
 	err := http.ListenAndServe(host, router)
 	if err != nil {

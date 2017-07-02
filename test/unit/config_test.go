@@ -10,6 +10,8 @@ import (
 func TestConfig(t *testing.T) {
 	g := Goblin(t)
 
+    geozipdb.CreateLogger()
+
 	g.Describe("Config", func() {
 		g.It("should create a config struct", func() {
 			cfg := new(geozipdb.Config)
