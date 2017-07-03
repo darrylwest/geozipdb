@@ -110,7 +110,7 @@ func (svc Service) ziplistHandler(w http.ResponseWriter, r *http.Request, ps htt
 	log.Info("find zip list for coord %s\n", p)
 
 	fields := strings.Split(p, ",")
-	if len(fields) != 2 {
+	if len(fields) < 2 {
 		svc.errorHandler(w, r, fmt.Sprintf("coordinates lat/lng not formatted correctly from %s", p))
 		return
 	}
@@ -127,7 +127,17 @@ func (svc Service) ziplistHandler(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	log.Info("find list from coords %f,%f", lat, lng)
+	radius := float64(10.0)
+	if len(fields) == 3 {
+		if rad, err := strconv.ParseFloat(fields[2], 64); err == nil {
+			radius = rad
+		} else {
+			svc.errorHandler(w, r, fmt.Sprintf("could not parse radius from %s", p))
+			return
+		}
+	}
+
+	log.Info("find list from coords %f,%f radius: %f", lat, lng, radius)
 
 	coord := Coord{lat, lng}
 
@@ -163,6 +173,11 @@ func (svc Service) coordHandler(w http.ResponseWriter, r *http.Request, ps httpr
 	}
 }
 
+// return the status as a json blob
+func (svc Service) statusHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	fmt.Fprintf(w, "%s\n\r", GetStatusAsJSON())
+}
+
 // Start - initialize the data and start the listener service
 func (svc Service) Start() {
 	if initialized == false {
@@ -179,6 +194,10 @@ func (svc Service) Start() {
 
 	rname = fmt.Sprintf("%s/ziplist/:coord", cfg.PrimaryRoute)
 	router.GET(rname, svc.ziplistHandler)
+	log.Info("added route %s\n", rname)
+
+	rname = fmt.Sprintf("%s/status", cfg.PrimaryRoute)
+	router.GET(rname, svc.statusHandler)
 	log.Info("added route %s\n", rname)
 
 	port := svc.config.Port

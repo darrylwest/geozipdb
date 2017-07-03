@@ -21,13 +21,13 @@ func TestConfig(t *testing.T) {
 		g.It("should create a context struct with defaults set", func() {
 			cfg := geozipdb.NewDefaultConfig()
 
-			g.Assert(cfg.Port).Equal(5000)
+			g.Assert(cfg.Port).Equal(4539)
 			g.Assert(cfg.PrimaryRoute).Equal("/v1/zipdb")
 		})
 
 		g.It("should parse an empty command line and return default config", func() {
 			cfg := geozipdb.ParseArgs()
-			g.Assert(cfg.Port).Equal(5000)
+			g.Assert(cfg.Port).Equal(4539)
 			g.Assert(cfg.PrimaryRoute).Equal("/v1/zipdb")
 		})
 	})

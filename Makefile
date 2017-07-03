@@ -42,7 +42,7 @@ start:
 	./bin/geozipdb &
 
 start-container:
-	docker run --name geozipdb --detach -p 4539:5000 darrylwest/geozipdb:latest
+	docker run --name geozipdb --detach -p 4539:4539 darrylwest/geozipdb:latest
 
 status:
 	curl http://localhost:4539/v1/zipdb/coord/94705

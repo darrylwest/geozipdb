@@ -23,7 +23,7 @@ type Config struct {
 func NewDefaultConfig() *Config {
 	cfg := new(Config)
 
-	cfg.Port = 5000
+	cfg.Port = 4539
 	cfg.PrimaryRoute = "/v1/zipdb"
 
 	return cfg
