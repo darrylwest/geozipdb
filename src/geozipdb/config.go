@@ -8,6 +8,7 @@ package geozipdb
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"path"
 )
@@ -43,6 +44,7 @@ func ParseArgs() *Config {
 	log.Info("%s Version: %s\n", path.Base(os.Args[0]), Version())
 
 	if *vers == true {
+		fmt.Printf("Version %s\n", Version())
 		os.Exit(0)
 	}
 
