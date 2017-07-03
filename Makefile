@@ -41,8 +41,11 @@ start:
 	( make build )
 	./bin/geozipdb &
 
+start-container:
+	docker run --name geozipdb --detach -p 4539:5000 darrylwest/geozipdb:latest
+
 status:
-	@( echo "implement a socket client that will request status..." )
+	curl http://localhost:4539/v1/zipdb/coord/94705
 
 edit:
 	vi -O2 src/*/*.go test/unit/*.go src/*.go

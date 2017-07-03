@@ -1,6 +1,11 @@
+#
+# @author darryl.west <darryl.west@raincitysoftware.com>
+# @created 2017-07-03 10:15:31
+#
+
 FROM scratch
 
-MAINTAINER darryl.west@raincitysoftware.com
+LABEL maintainer="darryl.west@raincitysoftware.com"
 
 COPY ./geozipdb /geozipdb
 
