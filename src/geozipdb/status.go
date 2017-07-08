@@ -40,7 +40,7 @@ func GetStatus() Status {
 	return s
 }
 
-// GetStatus return the current status as a json string
+// GetStatusAsJSON return the current status as a json string
 func GetStatusAsJSON() string {
 	status := GetStatus()
 	json, _ := json.Marshal(status)
