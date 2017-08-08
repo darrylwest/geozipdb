@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 export GOPATH:=$(HOME)/.gopath:$(PWD)
-IMAGE=darrylwest/geozipdb:latest
+IMAGE=ebay-local/geozipdb:latest
 
 build: 
 	@[ -d bin ] || mkdir bin
@@ -45,7 +45,9 @@ start-container:
 	docker run --name geozipdb --detach -p 4539:4539 darrylwest/geozipdb:latest
 
 status:
-	curl http://localhost:4539/v1/zipdb/coord/94705
+	curl http://localhost:4540/v1/zipdb/status
+	curl http://localhost:4541/v1/zipdb/status
+	curl http://localhost:4542/v1/zipdb/status
 
 edit:
 	vi -O2 src/*/*.go test/unit/*.go src/*.go
