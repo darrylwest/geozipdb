@@ -49,6 +49,11 @@ status:
 	curl http://localhost:4541/v1/zipdb/status
 	curl http://localhost:4542/v1/zipdb/status
 
+integration-test:
+	curl http://localhost:4540/v1/zipdb/coord/94705
+	curl http://localhost:4541/v1/zipdb/coord/98405
+	curl http://localhost:4542/v1/zipdb/ziplist/37.865183,-122.238209
+
 edit:
 	( gofmt -s -w src/*.go src/geozipdb/*.go test/*/*.go )
 	vi -O2 src/*/*.go test/unit/*.go src/*.go
