@@ -57,5 +57,5 @@ You may change the logging level either through the command line, or in the API 
 
 Apache 2.0
 
-###### Copyright © 2017, Rain City Software | darryl.west | Version 1.0.8
+###### Copyright © 2017, Rain City Software | darryl.west | Version 18.5.26
 

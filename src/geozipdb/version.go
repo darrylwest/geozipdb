@@ -8,9 +8,9 @@ package geozipdb
 import "fmt"
 
 const (
-	major = 1
-	minor = 0
-	patch = 8
+	major = 18
+	minor = 5
+	patch = 26
 )
 
 // Version - return the version number as a single string
