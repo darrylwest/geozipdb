@@ -9,8 +9,8 @@ package geozipdb
 
 import (
 	"encoding/json"
+	"os"
 	"runtime"
-    "os"
 	"time"
 )
 
@@ -20,7 +20,7 @@ var started = time.Now().Unix()
 type Status struct {
 	Status    string `json:"status"`
 	Version   string `json:"version"`
-    PID       int    `json:"pid"`
+	PID       int    `json:"pid"`
 	CPUs      int    `json:"cpus"`
 	GoVers    string `json:"go"`
 	TimeStamp int64  `json:"ts"`
@@ -34,7 +34,7 @@ func GetStatus() Status {
 	s := Status{}
 	s.Status = "ok"
 	s.Version = Version()
-    s.PID = os.Getpid()
+	s.PID = os.Getpid()
 	s.CPUs = runtime.NumCPU()
 	s.GoVers = runtime.Version()
 	s.TimeStamp = now

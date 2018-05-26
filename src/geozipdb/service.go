@@ -175,8 +175,8 @@ func (svc Service) coordHandler(w http.ResponseWriter, r *http.Request, ps httpr
 
 // return the status as a json blob
 func (svc Service) statusHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-    json := GetStatusAsJSON()
-    fmt.Println(json)
+	json := GetStatusAsJSON()
+	fmt.Println(json)
 	fmt.Fprintf(w, "%s\n\r", json)
 }
 

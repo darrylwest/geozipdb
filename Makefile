@@ -50,6 +50,7 @@ status:
 	curl http://localhost:4542/v1/zipdb/status
 
 edit:
+	( gofmt -s -w src/*.go src/geozipdb/*.go test/*/*.go )
 	vi -O2 src/*/*.go test/unit/*.go src/*.go
 
 .PHONY: format test qtest watch run
