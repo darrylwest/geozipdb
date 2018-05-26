@@ -42,7 +42,7 @@ start:
 	./bin/geozipdb &
 
 start-container:
-	docker run --name geozipdb --detach -p 4539:4539 darrylwest/geozipdb:latest
+	./docker/run-farm.sh
 
 status:
 	curl http://localhost:4540/v1/zipdb/status
