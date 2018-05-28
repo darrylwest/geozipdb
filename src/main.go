@@ -1,3 +1,7 @@
+//
+// @author darryl.west@raincitysoftware.com
+//
+
 package main
 
 import (
